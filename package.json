@@ -82,10 +82,8 @@
     }
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "src/**/*.ts": [
-      "npm run lint",
-      "prettier --write"
+    "{src,apps,libs,test}/**/*.ts": [
+      "npm run lint"
     ]
   }
 }
