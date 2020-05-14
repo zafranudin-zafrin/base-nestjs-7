@@ -1,0 +1,56 @@
+image: node:12.13.1-buster
+
+stages:
+  - build
+  - test
+  - deploy_staging
+
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
+code_quality:
+  artifacts:
+    paths: [gl-code-quality-report.json]
+
+cache:
+  paths:
+    - node_modules/
+    - coverage
+
+install_dependencies:
+  stage: build
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+test:
+  stage: test
+  script: npm run test:cov
+  coverage: /All\sfiles.*?\s+(\d+.\d+)/
+  artifacts:
+    when: always
+    paths:
+      - coverage
+    expire_in: 10 days
+  allow_failure: true
+
+deploy_staging:
+  stage: deploy_staging
+  before_script:
+    - 'which ssh-agent || ( sudo apt-get update -y && sudo apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+  environment:
+    name: staging
+
+  script:
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - rm -rf .git
+    - ssh -o StrictHostKeyChecking=no manjur@52.221.185.183 "cd ~/www/nestjs-api-develop && git checkout develop && git fetch origin develop && git reset --hard origin/develop && npm install && exit"
+
+  only:
+    - develop
