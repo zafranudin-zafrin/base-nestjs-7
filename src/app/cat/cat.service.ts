@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cat } from './repository/cat.entity';
 import { CreateCatDto } from './dto';
@@ -26,7 +26,7 @@ export class CatService {
     }
 
     async findById(id): Promise<Cat> {
-        const cat =  await this.repository.findOne({ id });
+        const cat = await this.repository.findOne({ id });
         if (!cat) {
             throw new NotFoundException();
         }

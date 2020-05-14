@@ -20,5 +20,15 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'quotes': [
+      'error',
+      'single',
+      { 'avoidEscape': true }
+    ],
+    'indent': [
+      'error',
+      4
+    ],
+    'no-console': 'error',
   },
 };
