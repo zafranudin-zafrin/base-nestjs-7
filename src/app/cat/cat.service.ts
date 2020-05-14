@@ -12,8 +12,7 @@ export class CatService {
     constructor(
         @InjectRepository(Cat)
         private readonly repository: CatRepository,
-    ) {
-    }
+    ) {}
 
     async findAll(httpQuery: PaginationHttpQuery): Promise<any> {
         const findOption: any = {};

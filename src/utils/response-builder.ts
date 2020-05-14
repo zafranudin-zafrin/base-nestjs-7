@@ -6,6 +6,6 @@ export const errorResponse = (
     return {
         error: type,
         message,
-        details
+        details,
     };
 };

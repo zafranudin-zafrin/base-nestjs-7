@@ -1,4 +1,9 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import {
+    CallHandler,
+    ExecutionContext,
+    Injectable,
+    NestInterceptor,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PaginatorInterface } from '../../database/base.repository';
@@ -9,7 +14,11 @@ import { PaginationHelper } from '../../utils/pagination.helper';
 export class HttpResponseInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         const req = context.switchToHttp().getRequest();
-        return next.handle().pipe(map(data => this.handlePagination(data, req.path, req.query)));
+        return next
+            .handle()
+            .pipe(
+                map(data => this.handlePagination(data, req.path, req.query)),
+            );
     }
 
     handlePagination(data, url, query: Partial<PaginationRequestInterface>) {
@@ -30,11 +39,19 @@ export class HttpResponseInterceptor implements NestInterceptor {
             const currentPage = query.page;
 
             if (query.page && Number(currentPage) < pagination.totalPages) {
-                pagination.next = url + '?' + PaginationHelper.nextPage(query, currentPage, pagination.totalPages);
+                pagination.next =
+                    url +
+                    '?' +
+                    PaginationHelper.nextPage(
+                        query,
+                        currentPage,
+                        pagination.totalPages,
+                    );
             }
 
             if (query.page && Number(currentPage) > 1) {
-                pagination.prev = url + '?' + PaginationHelper.prevPage(query, currentPage);
+                pagination.prev =
+                    url + '?' + PaginationHelper.prevPage(query, currentPage);
             }
 
             Object.assign(responseBuilder, { pagination });
@@ -42,5 +59,4 @@ export class HttpResponseInterceptor implements NestInterceptor {
 
         return responseBuilder;
     }
-
 }

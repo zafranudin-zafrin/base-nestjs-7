@@ -4,7 +4,10 @@ import { CreateCatDto } from './dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Cat } from './repository/cat.entity';
 import { UpdateCatDto } from './dto/update-cat.dto';
-import { PaginationHttpQuery, PaginationRequestInterface } from '../../utils/pagination.http-query';
+import {
+    PaginationHttpQuery,
+    PaginationRequestInterface,
+} from '../../utils/pagination.http-query';
 
 @ApiTags('cat')
 @Controller('cat')
@@ -53,7 +56,6 @@ export class CatController {
     @ApiResponse({ status: 401, description: 'Unauthorized.' })
     @ApiResponse({ status: 500, description: 'Internal Server Error.' })
     findSeniorCat() {
-
         return this.catService.findSenior();
     }
 }

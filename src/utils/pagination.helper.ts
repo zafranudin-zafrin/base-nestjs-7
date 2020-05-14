@@ -19,6 +19,7 @@ export class PaginationHelper {
 
     static objectToUrl(payload: object) {
         return Object.keys(payload)
-            .map(key => `${key}=${encodeURIComponent(payload[key])}`).join('&');
+            .map(key => `${key}=${encodeURIComponent(payload[key])}`)
+            .join('&');
     }
 }
